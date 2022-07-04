@@ -21,6 +21,8 @@ gcsfs
 google-cloud-storage
 mlflow
 s3fs
+fastapi==0.78.0
+uvicorn==0.18.2
 
 # utilities
 six>=1.14
