@@ -16,7 +16,7 @@ def get_top_level_posts(url):
     for top_level_comment in submission.comments:
         df = df.append({'Answer' : top_level_comment.body},
                 ignore_index = True)
-    title = 'test'
+    title = submission.title
     df.to_csv(f'raw_data/{title}')
     return df
 
