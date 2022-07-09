@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
-import VoightKampffTestBackend.response_generator
+from VoightKampffTestBackend import response_generator
 
 app = FastAPI()
 
@@ -33,4 +33,6 @@ def question():
 
 @app.get("/response")
 def response(question):
-    pass
+    sess = response_generator.Response().get_model()
+    answer = response_generator.Response().get_response(sess=sess, prompt=question)
+    return {"response": answer}
