@@ -24,10 +24,11 @@ class Response:
         pass
 
     def get_response(self, sess, prompt="How can you prove you aren't an android?"):
-        response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=30, top_k=100)
+        response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=30, top_k=100,
+                                 return_as_list=True)[0]
         return response
 
 
-if __name__ == '__main.py__':
-    sess = Response().get_base_model()
-    print(Response().get_response(sess=sess))
+# if __name__ == '__main.py__':
+sess = Response().get_model()
+print(Response().get_response(sess=sess))
