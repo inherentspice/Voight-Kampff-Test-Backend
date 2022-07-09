@@ -33,3 +33,4 @@ def question():
 
 @app.get("/response")
 def response(question):
+    pass
