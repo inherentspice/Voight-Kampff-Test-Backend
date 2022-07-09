@@ -1,13 +1,14 @@
-import code
+import VoightKampffTestBackend.gettit as gettit
 import praw
 import pandas as pd
 
 def get_top_level_posts(url):
+    codes = gettit.Codes()
     reddit = praw.Reddit(
-        client_id=code.reddit_client_id,
-        client_secret=code.reddit_secret,
-        password=code.reddit_password,
-        user_agent=code.reddit_username)
+        client_id=codes.reddit_client_id,
+        client_secret=codes.reddit_secret,
+        password=codes.reddit_password,
+        user_agent=codes.reddit_username)
 
     df = pd.DataFrame(columns = ['Answer'])
     submission = reddit.submission(url=url)
@@ -21,11 +22,12 @@ def get_top_level_posts(url):
     return df
 
 def get_child_posts(url):
+    codes = gettit.Codes()
     reddit = praw.Reddit(
-        client_id=code.reddit_client_id,
-        client_secret=code.reddit_secret,
-        password=code.reddit_password,
-        user_agent=code.reddit_username)
+        client_id=codes.reddit_client_id,
+        client_secret=codes.reddit_secret,
+        password=codes.reddit_password,
+        user_agent=codes.reddit_username)
 
     df = pd.DataFrame(columns = ['Answer'])
     submission = reddit.submission(url=url)
@@ -38,7 +40,7 @@ def get_child_posts(url):
     df.to_csv(f'raw_data/{title}_all.csv')
     return df
 
-if __name__ == '__main__.py':
-    url = 'https://www.reddit.com/r/AskReddit/comments/vnkxce/whats_a_weird_smell_youre_willing_to_admit_you/'
+if __name__ == '__main__':
+    url = 'https://www.reddit.com/r/AskReddit/comments/vubkth/whats_a_job_thats_romanticized_but_in_reality/'
     get_top_level_posts(url=url)
     get_child_posts(url)
