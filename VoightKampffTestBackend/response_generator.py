@@ -29,6 +29,6 @@ class Response:
         return response
 
 
-# if __name__ == '__main.py__':
-sess = Response().get_model()
-print(Response().get_response(sess=sess))
+if __name__ == '__main.py__':
+    sess = Response().get_model()
+    print(Response().get_response(sess=sess))
