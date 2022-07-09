@@ -8,7 +8,8 @@ wheel>=0.29
 numpy
 pandas
 scikit-learn
-gpt-2-simple
+gpt-2-simple==0.8.1
+tensowflow==2.9.1
 
 # tests/linter
 black
