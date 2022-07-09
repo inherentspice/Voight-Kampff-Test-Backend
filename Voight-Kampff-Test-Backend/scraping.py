@@ -37,6 +37,7 @@ def get_child_posts(url):
     title = submission.title
     df.to_csv(f'raw_data/{title}_all.csv')
     return df
+
 if __name__ == '__main__.py':
     url = 'https://www.reddit.com/r/AskReddit/comments/vnkxce/whats_a_weird_smell_youre_willing_to_admit_you/'
     get_top_level_posts(url=url)
