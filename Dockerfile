@@ -3,6 +3,7 @@ FROM python:3.8.12-buster
 WORKDIR /VoightKampffTestBackend
 
 COPY checkpoint/run1  /VoightKampffTestBackend/checkpoint/run1
+COPY models/124M  /VoightKampffTestBackend/models/124M
 COPY requirements.txt /VoightKampffTestBackend//requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
