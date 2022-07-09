@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
+import VoightKampffTestBackend.response_generator
 
 app = FastAPI()
 
@@ -29,3 +30,6 @@ def question():
                  8: "You get teleported to the day you were born with all the memories from your past life, but you’re now an infant. What do you do?}"}
 
     return {"question": questions.get(random_int)}
+
+@app.get("/response")
+def response(question):
