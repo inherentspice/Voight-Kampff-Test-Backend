@@ -6,7 +6,7 @@ import tensorflow as tf
 
 class Response:
     def __init__(self):
-        self.model = None
+        self.sess = None
 
     def get_model(self, model_name="124M"):
         if not os.path.isdir(os.path.join("models", model_name)):
@@ -14,14 +14,31 @@ class Response:
             gpt2.download_gpt2(model_name=model_name)   # model is saved into current directory under /models/124M/
 
         tf.compat.v1.reset_default_graph()
-        sess = gpt2.start_tf_sess()
+        self.sess = gpt2.start_tf_sess()
 
         gpt2.load_gpt2(sess)
 
         return sess
 
-    def train_model(self):
-        pass
+    def train_model(self, file, **kwargs):
+        if kwargs.get("model_name"):
+            model_name = kwargs.get("model_name")
+        else:
+            model_name = "124M"
+
+        if kwargs.get("steps"):
+            steps = kwargs.get("steps")
+        else:
+            steps = 5
+
+        gpt2.finetune(sess,
+              file,
+              model_name=model_name,
+              steps=steps,
+              reuse=True)
+
+        return sess
+
 
     def get_response(self, sess, prompt="How can you prove you aren't an android?"):
         response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=30, top_k=100,
