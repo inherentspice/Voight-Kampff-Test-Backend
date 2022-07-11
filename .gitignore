@@ -7,7 +7,7 @@ raw_data/
 **/__pycache__/
 .env
 .ipynb
-code.py
+gettit.py
 checkpoint/
 models/
 wagon-bootcamp-354400-769b4ba3f103.json
