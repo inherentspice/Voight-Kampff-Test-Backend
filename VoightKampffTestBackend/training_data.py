@@ -7,7 +7,7 @@ class Data:
         pass
 
     def get_response(self):
-        csv_path = 'raw_data/scraped_data'
+        csv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'raw_data', 'scraped_data')
         file_names = [f for f in os.listdir(csv_path) if f.endswith('.csv')]
         files = file_names.copy()
 
