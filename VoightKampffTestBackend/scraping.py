@@ -18,7 +18,7 @@ def get_top_level_posts(url):
         df = df.append({'Answer' : top_level_comment.body},
                 ignore_index = True)
     title = submission.title
-    df.to_csv(f'raw_data/{title}.csv')
+    df.to_csv(f'raw_data/scraped_data/{title}.csv')
     return df
 
 def get_child_posts(url):
@@ -37,7 +37,7 @@ def get_child_posts(url):
         df = df.append({'Answer' : comment.body},
                 ignore_index = True)
     title = submission.title
-    df.to_csv(f'raw_data/{title}_all.csv')
+    df.to_csv(f'raw_data/scraped_data/{title}_all.csv')
     return df
 
 if __name__ == '__main__':
