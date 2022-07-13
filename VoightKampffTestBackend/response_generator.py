@@ -14,11 +14,15 @@ class Response:
             gpt2.download_gpt2(model_name=model_name)   # model is saved into current directory under /models/124M/
 
         tf.compat.v1.reset_default_graph()
-        self.sess = gpt2.start_tf_sess()
 
-        gpt2.load_gpt2(sess)
+        if self.sess == None:
+            self.sess = gpt2.start_tf_sess()
+        else:
+            self.sess = gpt2.reset_session(self.sess)
 
-        return sess
+        gpt2.load_gpt2(self.sess)
+        return self.sess
+
 
     def train_model(self, file, **kwargs):
         if kwargs.get("model_name"):
@@ -31,13 +35,13 @@ class Response:
         else:
             steps = 5
 
-        gpt2.finetune(sess,
+        gpt2.finetune(self.sess,
               file,
               model_name=model_name,
               steps=steps,
               reuse=True)
 
-        return sess
+        return self.sess
 
 
     def get_response(self, sess, prompt="How can you prove you aren't an android?"):
@@ -46,6 +50,6 @@ class Response:
         return response
 
 
-if __name__ == '__main.py__':
+if __name__ == '__main__':
     sess = Response().get_model()
     print(Response().get_response(sess=sess))
