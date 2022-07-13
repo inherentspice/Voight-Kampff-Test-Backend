@@ -22,6 +22,17 @@ class Data:
 
         return data
 
+    def transform_training_data(self):
+
+        data = self.get_response()
+
+        df = df.fillna(method='ffill')
+
+        data.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
+
+        return
+
+
 
 
 if __name__ == '__main__':
