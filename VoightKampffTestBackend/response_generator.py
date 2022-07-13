@@ -39,7 +39,13 @@ class Response:
               file,
               model_name=model_name,
               steps=steps,
+              restore_from ='fresh',
+              learning__rate = 1e-5,
+              print_model = 1,
+              sample_every = 1,
+              save_every = 3,
               reuse=True)
+
 
         return sess
 
