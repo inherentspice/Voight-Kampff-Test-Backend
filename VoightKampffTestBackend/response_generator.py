@@ -24,7 +24,7 @@ class Response:
         return self.sess
 
 
-    def train_model(self, file, **kwargs):
+    def train_model(self, sess, file, **kwargs):
         if kwargs.get("model_name"):
             model_name = kwargs.get("model_name")
         else:
@@ -35,17 +35,17 @@ class Response:
         else:
             steps = 5
 
-        gpt2.finetune(self.sess,
+        gpt2.finetune(sess,
               file,
               model_name=model_name,
               steps=steps,
               reuse=True)
 
-        return self.sess
+        return sess
 
 
-    def get_response(self, sess, prompt="How can you prove you aren't an android?"):
-        response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=30, top_k=100,
+    def get_response(self, sess, prompt="How can you prove you aren't an android?", length=30):
+        response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=length, top_k=100,
                                  return_as_list=True)[0]
         return response
 
