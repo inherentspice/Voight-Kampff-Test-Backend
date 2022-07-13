@@ -25,7 +25,9 @@ class Data:
     def transform_training_data(self):
 
         data = self.get_response()
+
         data.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
+
         return
 
 
