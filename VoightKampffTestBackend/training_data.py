@@ -26,6 +26,8 @@ class Data:
 
         data = self.get_response()
 
+        df = df.fillna(method='ffill')
+
         data.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
 
         return
