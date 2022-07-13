@@ -36,4 +36,4 @@ def question():
 def response(question):
     sess = response_generator.Response().get_model()
     answer = response_generator.Response().get_response(sess=sess, prompt=question)
-    return {"response": answer}
+    return {"response": answer.rpartition('?')[2]}
