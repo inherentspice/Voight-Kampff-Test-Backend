@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/mac/code/inherentspice/Voight-Kampff-Test-Backend'
+pip install -r requirements.txt
+make: Leaving directory `/Users/mac/code/inherentspice/Voight-Kampff-Test-Backend'
+ 
