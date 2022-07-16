@@ -6,7 +6,7 @@ COPY checkpoint/run2  /VoightKampffTestBackend/checkpoint/run1
 COPY requirements.txt /VoightKampffTestBackend//requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-COPY api  /VoightKampffTestBackend/api
+COPY api /VoightKampffTestBackend/api
 COPY VoightKampffTestBackend/response_generator.py  /VoightKampffTestBackend/VoightKampffTestBackend/response_generator.py
 
 CMD uvicorn api.fast:app --host 0.0.0.0 --port $PORT
