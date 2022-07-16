@@ -35,9 +35,9 @@ def question():
 @app.get("/response")
 def response(question):
     sess = response_generator.Response().get_model()
-    length = np.random.randint(30, 6000)
-    top_k = np.random.randint(2, 100)
-    temperature = np.random.random()
+    length = np.random.randint(30, 100)
+    top_k = np.random.randint(2, 6000)
+    temperature = np.random.uniform(0.6, 0.9)
 
-    answer = response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature)
+    answer = response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature, run_name='run2')
     return {"response": answer.rpartition('?')[2]}
