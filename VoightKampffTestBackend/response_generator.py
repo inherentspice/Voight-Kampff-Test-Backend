@@ -8,7 +8,7 @@ class Response:
     def __init__(self):
         self.sess = None
 
-    def get_model(self, model_name="124M"):
+    def get_model(self, model_name="124M", run_name="run1"):
         if not os.path.isdir(os.path.join("models", model_name)):
             print(f"Downloading {model_name} model...")
             gpt2.download_gpt2(model_name=model_name)   # model is saved into current directory under /models/124M/
@@ -20,7 +20,7 @@ class Response:
         else:
             self.sess = gpt2.reset_session(self.sess)
 
-        gpt2.load_gpt2(self.sess)
+        gpt2.load_gpt2(self.sess, run_name=run_name)
         return self.sess
 
 

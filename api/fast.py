@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 from VoightKampffTestBackend import response_generator
+import time
 
 app = FastAPI()
 
@@ -13,9 +15,57 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def index():
-    return {"greeting": "Welcome to the Voight-Kampff Test API"}
+# html = """
+# <!DOCTYPE html>
+# <html>
+#     <head>
+#         <title>Chat</title>
+#     </head>
+#     <body>
+#         <h1>Voight-Kampff Test Response</h1>
+#         <form action="" onsubmit="sendMessage(event)">
+#             <input type="text" id="messageText" autocomplete="off"/>
+#             <button>Send</button>
+#         </form>
+#         <ul id='messages'>
+#         </ul>
+#         <script>
+#             var ws = new WebSocket("ws://localhost:8000/ws");
+#             ws.onmessage = function(event) {
+#                 var messages = document.getElementById('messages')
+#                 var message = document.createElement('li')
+#                 var content = document.createTextNode(event.data)
+#                 message.appendChild(content)
+#                 messages.appendChild(message)
+#             };
+#             function sendMessage(event) {
+#                 var input = document.getElementById("messageText")
+#                 ws.send(input.value)
+#                 input.value = ''
+#                 event.preventDefault()
+#             }
+#         </script>
+#     </body>
+# </html>
+# """
+
+@app.get('/')
+def get():
+    return "Welcome to Voight-Kampff Test!"
+
+# @app.get("/")
+# async def get():
+#     return HTMLResponse(html)
+
+
+# @app.websocket("/ws")
+# async def websocket_endpoint(websocket: WebSocket):
+#     await websocket.accept()
+#     while True:
+#         data = await websocket.receive_text()
+#         answer = response(data)["response"]
+#         await websocket.send_text(f"{answer}")
+
 
 @app.get("/question")
 def question():
@@ -34,10 +84,12 @@ def question():
 
 @app.get("/response")
 def response(question):
-    sess = response_generator.Response().get_model()
-    length = np.random.randint(30, 100)
+    sess = response_generator.Response().get_model(run_name='run2')
+    length = np.random.randint(50, 100)
     top_k = np.random.randint(2, 6000)
     temperature = np.random.uniform(0.6, 0.9)
 
     answer = response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature, run_name='run2')
+    locate = answer.rfind('.')
+    answer = answer[:locate+1]
     return {"response": answer.rpartition('?')[2]}
