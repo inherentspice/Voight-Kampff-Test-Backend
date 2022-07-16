@@ -27,15 +27,13 @@ class Data:
     def transform_training_data(self):
 
         data = self.get_response()
-        #slurs = {"fuck", "shit", " shitty", "anal", "asshole", "dick", "dickhead", "wanker", "prick", "fuckhead",
-                # "deepshit", "cum", "cumhead", "twat", "cunt", "pussy", "vagina", "whore", "slut", "slutty", "sonofabitch", 'testicles',
+        #slurs = ["fuck", "shit", " shitty", "anal", "asshole", "dick", "dickhead", "wanker", "prick", "fuckhead","fucking"
+                 #"deepshit", "cum", "cumhead", "twat", "cunt", "pussy", "vagina", "whore", "slut", "slutty", "sonofabitch", 'testicles',
                  #"skank", "skanky", "skanks", "screw", "sex", "sexx", "sexxx", "xxx", "queer", "puta", "poo", "poop", "poes", "porn",
                  #"nigga", "nigger", "niggas", "negro", "negros", "nikka", "nikkas", "paki", "orgasm", "redneck", "motherfucker", "mofo", "masturbate",
                  #"masturbates", "masturbating", "lesbian", "lesbo", "trans", "transgender", "knob", "knobs", "knobz", "jizz", "jerkoff", "fag", "faggot",
-                 #"fags", "fagz", "faggots"}
+                 #"fags", "fagz", "faggots"]
 
-        data = data.replace(("reddit", "my guy"),
-                             ("Edit", " "))
 
         df = data.fillna(method='ffill')
 
@@ -46,7 +44,17 @@ class Data:
         #str_to_df = censored.DataFrame()
 
 
-        #censored.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
+        df.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
+
+        with open('raw_data/training_files.txt', 'r') as f, open('raw_data/training_files_edited.txt', 'w') as fo:
+            for line in f:
+                fo.write(line.replace('reddit', 'my guy').replace("edit:", "").replace("Edit:", "").replace("fucking", "so").replace('"', " ")
+                         .replace('FUCK', "HELL").replace('fuckin', "nice").replace('fuck', "hell").replace('Fuck', "Hell").replace('[deleted]', "")
+                         .replace('[removed]', "").replace('shit', "things").replace('shitty', "not nice").replace('ass', "behind")
+                         .replace('asshole', "person").replace('an asshole', "a person"))
+
+            #for v in slurs:
+                #str.replace("", "nice")
 
         return
 
