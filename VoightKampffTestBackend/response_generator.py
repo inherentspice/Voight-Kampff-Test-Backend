@@ -45,8 +45,8 @@ class Response:
 
         return sess
 
-    def get_response(self, sess, prompt="How can you prove you aren't an android?", length=30, temperature=0.7):
-        response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=length, top_k=100, temperature=temperature,
+    def get_response(self, sess, prompt="How can you prove you aren't an android?", length=50, temperature=0.8, top_k=40):
+        response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=length, temperature=temperature, top_k=top_k,
                                  return_as_list=True)[0]
         return response
 
