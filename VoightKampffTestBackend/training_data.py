@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from better_profanity import profanity
 
 
 class Data:
@@ -26,9 +27,19 @@ class Data:
 
         data = self.get_response()
 
-        df = df.fillna(method='ffill')
+        data = data.replace(("reddit", "my guy"),
+                             ("Edit", " "))
 
-        data.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
+        df = data.fillna(method='ffill')
+
+        #.astype(str)
+
+        #censored = profanity.censor(df, 'heck')
+
+        #str_to_df = censored.DataFrame()
+
+
+        #censored.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
 
         return
 
@@ -37,3 +48,4 @@ class Data:
 
 if __name__ == '__main__':
     print(Data().get_response())
+    Data().transform_training_data()
