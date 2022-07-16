@@ -1,3 +1,4 @@
+from operator import index
 import pandas as pd
 import os
 from better_profanity import profanity
@@ -26,6 +27,12 @@ class Data:
     def transform_training_data(self):
 
         data = self.get_response()
+        #slurs = {"fuck", "shit", " shitty", "anal", "asshole", "dick", "dickhead", "wanker", "prick", "fuckhead",
+                # "deepshit", "cum", "cumhead", "twat", "cunt", "pussy", "vagina", "whore", "slut", "slutty", "sonofabitch", 'testicles',
+                 #"skank", "skanky", "skanks", "screw", "sex", "sexx", "sexxx", "xxx", "queer", "puta", "poo", "poop", "poes", "porn",
+                 #"nigga", "nigger", "niggas", "negro", "negros", "nikka", "nikkas", "paki", "orgasm", "redneck", "motherfucker", "mofo", "masturbate",
+                 #"masturbates", "masturbating", "lesbian", "lesbo", "trans", "transgender", "knob", "knobs", "knobz", "jizz", "jerkoff", "fag", "faggot",
+                 #"fags", "fagz", "faggots"}
 
         data = data.replace(("reddit", "my guy"),
                              ("Edit", " "))
