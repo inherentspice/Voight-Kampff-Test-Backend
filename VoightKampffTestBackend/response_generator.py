@@ -39,19 +39,14 @@ class Response:
               file,
               model_name=model_name,
               steps=steps,
-              restore_from ='fresh',
-              learning__rate = 1e-5,
-              print_model = 1,
-              sample_every = 1,
-              save_every = 3,
+              restore_from ='latest',
               reuse=True)
 
 
         return sess
 
-  def get_response(self, sess, prompt="How can you prove you aren't an android?", length=30, temperature=0.7):
-        response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=length, top_k=100, temperature=temperature
-
+    def get_response(self, sess, prompt="How can you prove you aren't an android?", length=30, temperature=0.7):
+        response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=length, top_k=100, temperature=temperature,
                                  return_as_list=True)[0]
         return response
 
