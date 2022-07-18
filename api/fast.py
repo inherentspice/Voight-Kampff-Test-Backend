@@ -3,7 +3,6 @@ from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 from VoightKampffTestBackend import response_generator
-import time
 
 app = FastAPI()
 
@@ -90,6 +89,12 @@ def response(question):
     temperature = np.random.uniform(0.6, 0.9)
 
     answer = response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature, run_name='run2')
-    locate = answer.rfind('.')
+    locate = answer.rfind(".")
     answer = answer[:locate+1]
-    return {"response": answer.rpartition('?')[2]}
+    return {"response": answer.rpartition("?")[2]}
+
+if __name__ == "__main__":
+    question = question()["question"]
+    response = response(question)["response"]
+    print(question)
+    print(response)
