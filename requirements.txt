@@ -1,22 +1,16 @@
 # packaging
-pip>=9
+pip
 setuptools>=26
-twine
 wheel>=0.29
 
 # data science
-numpy
-pandas
-scikit-learn
+
 gpt-2-simple==0.8.1
-tensorflow==2.9.1
+tensorflow>=2.9.0
 
 # tests/linter
 black
-coverage
-flake8
 pytest
-yapf
 
 # API
 gcsfs
@@ -28,7 +22,6 @@ uvicorn==0.18.2
 
 # utilities
 six>=1.14
-joblib
 memoized-property
 termcolor
 
