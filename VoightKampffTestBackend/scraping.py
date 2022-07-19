@@ -5,6 +5,13 @@ import time
 import os
 
 def get_child_posts(url, topic='qanda'):
+    """Writes the top-rated comments from a r/AskReddit thread
+    to a csv file. It will create a directory named the variable
+    saved under topic, and the file will be the title of the
+    reddit thread. Function required the url for the reddit
+    thread you want to scrape."""
+
+    # instantiate the scraper and authenticate.
     codes = gettit.Codes()
     reddit = praw.Reddit(
         client_id=codes.reddit_client_id,
@@ -12,26 +19,35 @@ def get_child_posts(url, topic='qanda'):
         password=codes.reddit_password,
         user_agent=codes.reddit_username)
 
+    #create directory if it does not exist
     path = f'raw_data/scraped_data/{topic}'
     if not os.path.exists(path):
         os.makedirs(path)
         print(f"Making new directory at {path}")
 
-
+    #create pandas DataFrame to store data
     df = pd.DataFrame(columns = ['Answer'])
+
+
     link = reddit.submission(url=url)
     link.comments.replace_more(limit=0)
 
+    #loop through top-level comments in the reddit thread
+    #and append to DataFrame
     for comment in link.comments.list():
         df = df.append({'Answer' : comment.body},
                 ignore_index = True)
+
+    #short title if it is not
     if topic=="qanda":
         title = link.title
     else:
         title = link.title[0:12]
 
+    #If '/' in title of thread, it will be read as a new directory
     title = title.replace("/", "")
 
+    #write DataFrame to a csv
     df.to_csv(f'raw_data/scraped_data/{topic}/{title}.csv')
     return df
 
