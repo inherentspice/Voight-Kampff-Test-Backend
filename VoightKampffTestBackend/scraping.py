@@ -70,7 +70,7 @@ def get_hot_posts(subreddit='AskReddit'):
         posts.append(post.url)
     for post in posts:
         print(f"Getting answers...")
-        get_top_level_posts(post, topic="misc")
+        get_child_posts(post, topic="misc")
         time.sleep(0.10)
 
 def search_by_keyword(subreddit="all", search_term="wealth"):
