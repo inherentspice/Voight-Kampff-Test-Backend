@@ -52,6 +52,8 @@ def get_child_posts(url, topic='qanda'):
     return df
 
 def get_hot_posts(subreddit='AskReddit'):
+
+    # instantiate the scraper and authenticate.
     codes = gettit.Codes()
     reddit = praw.Reddit(
         client_id=codes.reddit_client_id,
@@ -59,16 +61,26 @@ def get_hot_posts(subreddit='AskReddit'):
         password=codes.reddit_password,
         user_agent=codes.reddit_username)
 
+    #create directory 'misc' if it does not exist
     path = f'raw_data/scraped_data/misc'
     if not os.path.exists(path):
         os.makedirs(path)
         print(f"Making new directory at {path}")
+
+    #create variable 'posts' to store urls
     posts = []
+
     link = reddit.subreddit(subreddit)
+
+    #loop through popular posts in 'subreddit' and
+    #store the url in 'posts'
     for post in link.hot(limit=10):
         posts.append(post.url)
+
+    #loop through urls and pass each to get_child_posts
+    #function to scrape comments
     for post in posts:
-        print(f"Getting answers...")
+        print(f"Getting answers from post")
         get_child_posts(post, topic="misc")
         time.sleep(0.10)
 
