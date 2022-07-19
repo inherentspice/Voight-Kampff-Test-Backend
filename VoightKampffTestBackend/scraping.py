@@ -52,6 +52,11 @@ def get_child_posts(url, topic='qanda'):
     return df
 
 def get_hot_posts(subreddit='AskReddit'):
+    """Collects the top ten trending posts on a subreddit, and
+    writes the top-rated comments to a csv file. It will create
+    a directory named 'misc', and the file will be the title of the
+    first twelve characters of the reddit thread. Function will default
+    scrape r/AskReddit unless a different subreddit is passed as a string."""
 
     # instantiate the scraper and authenticate.
     codes = gettit.Codes()
