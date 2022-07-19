@@ -24,7 +24,7 @@ def get_top_level_posts(url):
     df.to_csv(f'raw_data/scraped_data/{title}.csv')
     return df
 
-def get_child_posts(url):
+def get_child_posts(url, topic='qanda'):
     codes = gettit.Codes()
     reddit = praw.Reddit(
         client_id=codes.reddit_client_id,
@@ -32,7 +32,7 @@ def get_child_posts(url):
         password=codes.reddit_password,
         user_agent=codes.reddit_username)
 
-    path = f'raw_data/scraped_data/qanda'
+    path = f'raw_data/scraped_data/{topic}'
     if not os.path.exists(path):
         os.makedirs(path)
         print(f"Making new directory at {path}")
@@ -45,8 +45,11 @@ def get_child_posts(url):
     for comment in link.comments.list():
         df = df.append({'Answer' : comment.body},
                 ignore_index = True)
-    title = link.title
-    df.to_csv(f'raw_data/scraped_data/qanda/{title}.csv')
+    if topic=="qanda":
+        title = link.title
+    else:
+        title = link.title[0:12]
+    df.to_csv(f'raw_data/scraped_data/{topic}/{title}.csv')
     return df
 
 def get_hot_posts(subreddit='AskReddit'):
@@ -67,7 +70,7 @@ def get_hot_posts(subreddit='AskReddit'):
         posts.append(post.url)
     for post in posts:
         print(f"Getting answers...")
-        get_top_level_posts(post)
+        get_top_level_posts(post, topic="misc")
         time.sleep(0.10)
 
 def search_by_keyword(subreddit="all", search_term="wealth"):
