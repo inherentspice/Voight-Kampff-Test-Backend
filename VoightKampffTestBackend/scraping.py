@@ -4,136 +4,125 @@ import pandas as pd
 import time
 import os
 
-def get_child_posts(url, topic='qanda'):
-    """Writes the top-rated comments from a r/AskReddit thread
-    to a csv file. It will create a directory named the variable
-    saved under topic, and the file will be the title of the
-    reddit thread. Function required the url for the reddit
-    thread you want to scrape."""
+class Reddit:
+    def __init__(self):
+        #instantiate the scraper and get authentification
+        self.codes = gettit.Codes()
+        self.reddit = praw.Reddit(client_id = self.codes.reddit_client_id,
+                                           client_secret = self.codes.reddit_secret,
+                                           password = self.codes.reddit_password,
+                                           user_agent = self.codes.reddit_username)
 
-    # instantiate the scraper and authenticate.
-    codes = gettit.Codes()
-    reddit = praw.Reddit(
-        client_id=codes.reddit_client_id,
-        client_secret=codes.reddit_secret,
-        password=codes.reddit_password,
-        user_agent=codes.reddit_username)
+    def get_child_posts(self, url, topic='qanda'):
+        """Writes the top-rated comments from a r/AskReddit thread
+        to a csv file. It will create a directory named the variable
+        saved under topic, and the file will be the title of the
+        reddit thread. Function required the url for the reddit
+        thread you want to scrape."""
 
-    #create directory if it does not exist
-    path = f'raw_data/scraped_data/{topic}'
-    if not os.path.exists(path):
-        os.makedirs(path)
-        print(f"Making new directory at {path}")
+        #create directory if it does not exist
+        path = f'raw_data/scraped_data/{topic}'
+        if not os.path.exists(path):
+            os.makedirs(path)
+            print(f"Making new directory at {path}")
 
-    #create pandas DataFrame to store data
-    df = pd.DataFrame(columns = ['Answer'])
+        #create pandas DataFrame to store data
+        df = pd.DataFrame(columns = ['Answer'])
 
 
-    link = reddit.submission(url=url)
-    link.comments.replace_more(limit=0)
+        link = self.reddit.submission(url=url)
 
-    #loop through top-level comments in the reddit thread
-    #and append to DataFrame
-    for comment in link.comments.list():
-        df = df.append({'Answer' : comment.body},
+        link.comments.replace_more(limit=0)
+
+        #loop through top-level comments in the reddit thread
+        #and append to DataFrame
+        for comment in link.comments.list():
+            df = df.append({'Answer' : comment.body},
                 ignore_index = True)
 
-    #short title if it is not
-    if topic=="qanda":
-        title = link.title
-    else:
-        title = link.title[0:12]
+        #short title if it is not
+        if topic=="qanda":
+            title = link.title
+        else:
+            title = link.title[0:12]
 
-    #If '/' in title of thread, it will be read as a new directory
-    title = title.replace("/", "")
+        #If '/' in title of thread, it will be read as a new directory
+        title = title.replace("/", "")
 
-    #write DataFrame to a csv
-    df.to_csv(f'raw_data/scraped_data/{topic}/{title}.csv')
-    return df
+        #write DataFrame to a csv
+        df.to_csv(f'raw_data/scraped_data/{topic}/{title}.csv')
+        return df
 
-def get_hot_posts(subreddit='AskReddit'):
-    """Collects the top ten trending posts on a subreddit, and
-    writes the top-rated comments to a csv file. It will create
-    a directory named 'misc', and the file will be the title of the
-    first twelve characters of the reddit thread. Function will default
-    scrape r/AskReddit unless a different subreddit is passed as a string."""
 
-    # instantiate the scraper and authenticate.
-    codes = gettit.Codes()
-    reddit = praw.Reddit(
-        client_id=codes.reddit_client_id,
-        client_secret=codes.reddit_secret,
-        password=codes.reddit_password,
-        user_agent=codes.reddit_username)
+    def get_hot_posts(self, subreddit='AskReddit'):
+        """Collects the top ten trending posts on a subreddit, and
+        writes the top-rated comments to a csv file. It will create
+        a directory named 'misc', and the file will be the title of the
+        first twelve characters of the reddit thread. Function will default
+        scrape r/AskReddit unless a different subreddit is passed as a string."""
 
-    #create directory 'misc' if it does not exist
-    path = f'raw_data/scraped_data/misc'
-    if not os.path.exists(path):
-        os.makedirs(path)
-        print(f"Making new directory at {path}")
 
-    #create variable 'posts' to store urls
-    posts = []
+        #create directory 'misc' if it does not exist
+        path = f'raw_data/scraped_data/misc'
+        if not os.path.exists(path):
+            os.makedirs(path)
+            print(f"Making new directory at {path}")
 
-    link = reddit.subreddit(subreddit)
+        #create variable 'posts' to store urls
+        posts = []
 
-    #loop through popular posts in 'subreddit' and
-    #store the url in 'posts'
-    for post in link.hot(limit=10):
-        posts.append(post.url)
+        link = self.reddit.subreddit(subreddit)
 
-    #loop through urls and pass each to get_child_posts
-    #function to scrape comments
-    for post in posts:
-        print(f"Getting answers from post")
-        get_child_posts(post, topic="misc")
-        time.sleep(0.10)
+        #loop through popular posts in 'subreddit' and
+        #store the url in 'posts'
+        for post in link.hot(limit=10):
+            posts.append(post.url)
 
-def search_by_keyword(subreddit="all", search_term="wealth", limit=1000):
-    """Searches 'all' subreddits for a search_term in the title, and
-    scrapes the top comments from 'limit' posts. Results are written
-    into one csv file with the name of the search term."""
+        #loop through urls and pass each to get_child_posts
+        #function to scrape comments
+        for post in posts:
+            print(f"Getting answers from post")
+            self.get_child_posts(post, topic="misc")
+            time.sleep(0.10)
 
-    # instantiate the scraper and authenticate.
-    codes = gettit.Codes()
-    reddit = praw.Reddit(
-        client_id=codes.reddit_client_id,
-        client_secret=codes.reddit_secret,
-        password=codes.reddit_password,
-        user_agent=codes.reddit_username)
 
-    #create directory 'topics' if it does not exist
-    path = f"raw_data/scraped_data/topics"
-    if not os.path.exists(path):
-        os.makedirs(path)
-        print(f"Making new directory at {path}")
+    def search_by_keyword(self, subreddit="all", search_term="wealth", limit=1000):
+        """Searches 'all' subreddits for a search_term in the title, and
+        scrapes the top comments from 'limit' posts. Results are written
+        into one csv file with the name of the search term."""
 
-    file_path = f"raw_data/scraped_data/topics/{search_term}.csv"
 
-    #checks if search_term has already been scraped and
-    #ends function if so
-    if os.path.isfile(file_path):
-        print(f"{search_term}.csv already exists...")
-        return
+        #create directory 'topics' if it does not exist
+        path = f"raw_data/scraped_data/topics"
+        if not os.path.exists(path):
+            os.makedirs(path)
+            print(f"Making new directory at {path}")
 
-    link = reddit.subreddit(subreddit)
+        file_path = f"raw_data/scraped_data/topics/{search_term}.csv"
 
-    #create DataFrame to store comments
-    df = pd.DataFrame(columns=['Answer'])
+        #checks if search_term has already been scraped and
+        #ends function if so
+        if os.path.isfile(file_path):
+            print(f"{search_term}.csv already exists...")
+            return
 
-    #loop through comments in each url and append
-    #results to 'df'
-    for post in link.search(search_term, limit=limit):
-        post.comments.replace_more(limit=0)
-        print(f"Getting comments from {post.title}")
-        for comment in post.comments.list():
-            df = df.append({'Answer' : comment.body},
+        link = self.reddit.subreddit(subreddit)
+
+        #create DataFrame to store comments
+        df = pd.DataFrame(columns=['Answer'])
+
+        #loop through comments in each url and append
+        #results to 'df'
+        for post in link.search(search_term, limit=limit):
+            post.comments.replace_more(limit=0)
+            print(f"Getting comments from {post.title}")
+            for comment in post.comments.list():
+                df = df.append({'Answer' : comment.body},
                     ignore_index = True)
-        time.sleep(0.10)
+            time.sleep(0.10)
 
-    #write results to csv named after the search_term
-    df.to_csv(f'raw_data/scraped_data/topics/{search_term}.csv')
-
+        #write results to csv named after the search_term
+        df.to_csv(f'raw_data/scraped_data/topics/{search_term}.csv')
 
 
 if __name__ == '__main__':
@@ -149,10 +138,10 @@ if __name__ == '__main__':
             ]
 
     for i in URLS:
-        get_child_posts(url=i)
+        Reddit().get_child_posts(url=i)
 
-    get_hot_posts()
+    Reddit().get_hot_posts()
 
     TOPICS = ["wealth", "rich", "lottery", "Bezos"]
     for i in TOPICS:
-        search_by_keyword(search_term=i)
+        Reddit().search_by_keyword(search_term=i)
