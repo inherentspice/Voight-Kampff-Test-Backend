@@ -13,7 +13,7 @@ class Data:
         for subdirs, dirs, files in os.walk(csv_path):
             question_answers[subdirs] = files
 
-        data = pd.DataFrame()
+        data = {}
 
         for key, value in question_answers.items():
             if value:
@@ -27,6 +27,14 @@ class Data:
 
         data = self.get_response()
 
+        for key, value in data.items():
+            if len(key) == 12:
+                print(value)
+            elif len(key) < 12:
+                pass
+            else:
+                pass
+
         #slurs = ["fuck", "shit", " shitty", "anal", "asshole", "dick", "dickhead", "wanker", "prick", "fuckhead","fucking"
                  #"deepshit", "cum", "cumhead", "twat", "cunt", "pussy", "vagina", "whore", "slut", "slutty", "sonofabitch", 'testicles',
                  #"skank", "skanky", "skanks", "screw", "sex", "sexx", "sexxx", "xxx", "queer", "puta", "poo", "poop", "poes", "porn",
@@ -35,7 +43,7 @@ class Data:
                  #"fags", "fagz", "faggots"]
 
 
-        df = data.fillna(method='ffill')
+        # df = data.fillna(method='ffill')
 
         #.astype(str)
 
@@ -44,14 +52,14 @@ class Data:
         #str_to_df = censored.DataFrame()
 
 
-        df.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
+        # df.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
 
-        with open('raw_data/training_files.txt', 'r') as f, open('raw_data/training_files_edited.txt', 'w') as fo:
-            for line in f:
-                fo.write(line.replace('reddit', 'my guy').replace("edit:", "").replace("Edit:", "").replace("fucking", "so").replace('"', " ")
-                         .replace('FUCK', "HELL").replace('fuckin', "nice").replace('fuck', "hell").replace('Fuck', "Hell").replace('[deleted]', "")
-                         .replace('[removed]', "").replace('shit', "things").replace('shitty', "not nice").replace('ass', "behind")
-                         .replace('asshole', "person").replace('an asshole', "a person"))
+        # with open('raw_data/training_files.txt', 'r') as f, open('raw_data/training_files_edited.txt', 'w') as fo:
+        #     for line in f:
+        #         fo.write(line.replace('reddit', 'my guy').replace("edit:", "").replace("Edit:", "").replace("fucking", "so").replace('"', " ")
+        #                  .replace('FUCK', "HELL").replace('fuckin', "nice").replace('fuck', "hell").replace('Fuck', "Hell").replace('[deleted]', "")
+        #                  .replace('[removed]', "").replace('shit', "things").replace('shitty', "not nice").replace('ass', "behind")
+        #                  .replace('asshole', "person").replace('an asshole', "a person"))
 
             #for v in slurs:
                 #str.replace("", "nice")
@@ -62,5 +70,5 @@ class Data:
 
 
 if __name__ == '__main__':
-    print(Data().get_response())
-    # Data().transform_training_data()
+    # print(Data().get_response())
+    Data().transform_training_data()
