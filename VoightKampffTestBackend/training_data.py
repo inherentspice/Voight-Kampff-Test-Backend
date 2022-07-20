@@ -27,48 +27,52 @@ class Data:
 
         data = self.get_response()
 
+        df_topics = pd.DataFrame()
+        df_trending = pd.DataFrame()
+        df_questions = pd.DataFrame()
+
         for key, value in data.items():
-            if len(key) == 12:
-                print(value)
-            elif len(key) < 12:
-                pass
+            if len(key) < 12:
+                df_topics[key] = value
+            elif len(key) == 12:
+                df_trending[key] = value
             else:
-                pass
-
-        #slurs = ["fuck", "shit", " shitty", "anal", "asshole", "dick", "dickhead", "wanker", "prick", "fuckhead","fucking"
-                 #"deepshit", "cum", "cumhead", "twat", "cunt", "pussy", "vagina", "whore", "slut", "slutty", "sonofabitch", 'testicles',
-                 #"skank", "skanky", "skanks", "screw", "sex", "sexx", "sexxx", "xxx", "queer", "puta", "poo", "poop", "poes", "porn",
-                 #"nigga", "nigger", "niggas", "negro", "negros", "nikka", "nikkas", "paki", "orgasm", "redneck", "motherfucker", "mofo", "masturbate",
-                 #"masturbates", "masturbating", "lesbian", "lesbo", "trans", "transgender", "knob", "knobs", "knobz", "jizz", "jerkoff", "fag", "faggot",
-                 #"fags", "fagz", "faggots"]
+                df_questions[key] = value
 
 
-        # df = data.fillna(method='ffill')
+        df_topics = df_topics.fillna(method='ffill')
+        df_trending = df_trending.fillna(method='ffill')
+        df_questions = df_questions.fillna(method='ffill')
 
-        #.astype(str)
+        forbidden = ['deleted', 'cunt', 'whore', 'nigga', 'fag', 'fags', 'faggot', 'nigga', 'nigger', 'niggas', 'negro',
+        'fagz', 'edit', 'slut', 'EDIT', 'Edit', 'reddit', 'skank']
 
-        #censored = profanity.censor(df, 'heck')
+        for words in forbidden:
+            df_topics = df_topics.replace(words, '', regex=True)
+            df_trending = df_trending.replace(words, '', regex=True)
+            df_questions = df_trending.replace(words, '', regex=True)
 
-        #str_to_df = censored.DataFrame()
+        df = df_topics.stack()
+        df = df.append(df_trending.stack())
+        df = df.append(df_questions.stack())
+
+        path = "raw_data/preprocessed_data"
+        if not os.path.exists(path):
+            os.makedirs(path)
+            print(f"Making new directory at {path}")
 
 
-        # df.to_csv('raw_data/training_files.txt', header=None, index=None, sep=' ', mode='a')
+        df.to_csv('raw_data/preprocessed_data/training_text.csv', index=None)
 
-        # with open('raw_data/training_files.txt', 'r') as f, open('raw_data/training_files_edited.txt', 'w') as fo:
-        #     for line in f:
-        #         fo.write(line.replace('reddit', 'my guy').replace("edit:", "").replace("Edit:", "").replace("fucking", "so").replace('"', " ")
-        #                  .replace('FUCK', "HELL").replace('fuckin', "nice").replace('fuck', "hell").replace('Fuck', "Hell").replace('[deleted]', "")
-        #                  .replace('[removed]', "").replace('shit', "things").replace('shitty', "not nice").replace('ass', "behind")
-        #                  .replace('asshole', "person").replace('an asshole', "a person"))
+        encoded_path = 'raw_data/encoded_data'
+        if not os.path.exists(encoded_path):
+            os.makedirs(encoded_path)
+            print(f"Making new directory at {path}")
 
-            #for v in slurs:
-                #str.replace("", "nice")
-
-        return
+        gpt.encode_csv('raw_data/preprocessed_data/training_text.csv', out_path='raw_data/encoded_data/encoded_text.csv')
 
 
 
 
 if __name__ == '__main__':
-    # print(Data().get_response())
     Data().transform_training_data()
