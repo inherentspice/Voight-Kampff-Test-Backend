@@ -1,7 +1,6 @@
-from operator import index
 import pandas as pd
 import os
-from better_profanity import profanity
+import gpt_2_simple as gpt
 
 
 class Data:
@@ -9,24 +8,25 @@ class Data:
         pass
 
     def get_response(self):
+        question_answers = {}
         csv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'raw_data', 'scraped_data')
-        file_names = [f for f in os.listdir(csv_path) if f.endswith('.csv')]
-        files = file_names.copy()
-
-        for i, j in enumerate(file_names):
-            file_names[i] = j.replace('_all.csv', '')
+        for subdirs, dirs, files in os.walk(csv_path):
+            question_answers[subdirs] = files
 
         data = pd.DataFrame()
 
-        for (x, y) in zip(file_names, files):
-            y = os.path.join(csv_path, y)
-            data[x] = pd.read_csv(y)['Answer']
+        for key, value in question_answers.items():
+            if value:
+                for file in value:
+                    y = os.path.join(key, file)
+                    data[file.replace('.csv', '')] = pd.read_csv(y)['Answer']
 
         return data
 
     def transform_training_data(self):
 
         data = self.get_response()
+
         #slurs = ["fuck", "shit", " shitty", "anal", "asshole", "dick", "dickhead", "wanker", "prick", "fuckhead","fucking"
                  #"deepshit", "cum", "cumhead", "twat", "cunt", "pussy", "vagina", "whore", "slut", "slutty", "sonofabitch", 'testicles',
                  #"skank", "skanky", "skanks", "screw", "sex", "sexx", "sexxx", "xxx", "queer", "puta", "poo", "poop", "poes", "porn",
@@ -63,4 +63,4 @@ class Data:
 
 if __name__ == '__main__':
     print(Data().get_response())
-    Data().transform_training_data()
+    # Data().transform_training_data()
