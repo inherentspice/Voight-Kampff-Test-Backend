@@ -105,3 +105,6 @@ gcp_submit_training:
 		--scale-tier CUSTOM \
     --master-machine-type n1-standard-16 \
 		--stream-logs
+
+get_data:
+	@python -m VoightKampffTestBackend.scraping

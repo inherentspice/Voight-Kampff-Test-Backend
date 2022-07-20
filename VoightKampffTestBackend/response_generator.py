@@ -25,7 +25,6 @@ class Response:
 
         tf.compat.v1.reset_default_graph()
 
-
         if self.sess == None:
             self.sess = gpt2.start_tf_sess()
         else:

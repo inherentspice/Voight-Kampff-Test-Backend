@@ -4,7 +4,6 @@ setuptools>=26
 wheel>=0.29
 
 # data science
-
 gpt-2-simple==0.8.1
 tensorflow>=2.9.0
 
