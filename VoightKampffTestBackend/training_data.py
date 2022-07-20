@@ -13,7 +13,7 @@ class Data:
         for subdirs, dirs, files in os.walk(csv_path):
             question_answers[subdirs] = files
 
-        data = pd.DataFrame()
+        data = {}
 
         for key, value in question_answers.items():
             if value:
