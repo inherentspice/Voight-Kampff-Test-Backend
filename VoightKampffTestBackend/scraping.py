@@ -142,6 +142,6 @@ if __name__ == '__main__':
 
     Reddit().get_hot_posts()
 
-    TOPICS = ["wealth", "rich", "lottery", "Bezos"]
+    TOPICS = ["wealth", "rich", "lottery", "Bezos", "quality of life", "improve life", "health", "worst alcohol", "tequila"]
     for i in TOPICS:
         Reddit().search_by_keyword(search_term=i)
