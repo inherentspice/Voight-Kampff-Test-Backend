@@ -90,6 +90,11 @@ def get_hot_posts(subreddit='AskReddit'):
         time.sleep(0.10)
 
 def search_by_keyword(subreddit="all", search_term="wealth", limit=1000):
+    """Searches 'all' subreddits for a search_term in the title, and
+    scrapes the top comments from 'limit' posts. Results are written
+    into one csv file with the name of the search term."""
+
+    # instantiate the scraper and authenticate.
     codes = gettit.Codes()
     reddit = praw.Reddit(
         client_id=codes.reddit_client_id,
@@ -97,6 +102,7 @@ def search_by_keyword(subreddit="all", search_term="wealth", limit=1000):
         password=codes.reddit_password,
         user_agent=codes.reddit_username)
 
+    #create directory 'topics' if it does not exist
     path = f"raw_data/scraped_data/topics"
     if not os.path.exists(path):
         os.makedirs(path)
@@ -104,14 +110,19 @@ def search_by_keyword(subreddit="all", search_term="wealth", limit=1000):
 
     file_path = f"raw_data/scraped_data/topics/{search_term}.csv"
 
+    #checks if search_term has already been scraped and
+    #ends function if so
     if os.path.isfile(file_path):
         print(f"{search_term}.csv already exists...")
         return
 
     link = reddit.subreddit(subreddit)
 
+    #create DataFrame to store comments
     df = pd.DataFrame(columns=['Answer'])
 
+    #loop through comments in each url and append
+    #results to 'df'
     for post in link.search(search_term, limit=limit):
         post.comments.replace_more(limit=0)
         print(f"Getting comments from {post.title}")
@@ -119,6 +130,8 @@ def search_by_keyword(subreddit="all", search_term="wealth", limit=1000):
             df = df.append({'Answer' : comment.body},
                     ignore_index = True)
         time.sleep(0.10)
+
+    #write results to csv named after the search_term
     df.to_csv(f'raw_data/scraped_data/topics/{search_term}.csv')
 
 
