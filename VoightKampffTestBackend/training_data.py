@@ -75,5 +75,4 @@ class Data:
 
 
 if __name__ == '__main__':
-    # print(Data().get_response())
-    print(Data().transform_training_data())
+    Data().transform_training_data()

@@ -108,3 +108,4 @@ gcp_submit_training:
 
 get_data:
 	@python -m VoightKampffTestBackend.scraping
+	@python -m VoightKampffTestBackend.training_data
