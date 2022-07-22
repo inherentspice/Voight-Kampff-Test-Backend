@@ -45,7 +45,7 @@ class Data:
         df_questions = df_questions.fillna(method='ffill')
 
         forbidden = ['deleted', 'cunt', 'whore', 'nigga', 'fag', 'fags', 'faggot', 'nigga', 'nigger', 'niggas', 'negro',
-        'fagz', 'edit', 'slut', 'EDIT', 'Edit', 'reddit', 'skank']
+        'fagz', 'edit', 'slut', 'EDIT', 'Edit', 'reddit', 'skank', 'nA', 'nB', 'NB']
 
         for words in forbidden:
             df_topics = df_topics.replace(words, '', regex=True)
