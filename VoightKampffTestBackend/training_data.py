@@ -48,12 +48,14 @@ class Data:
 
         forbidden = ['deleted', 'cunt', 'whore', 'nigga', 'fag', 'fags', 'faggot', 'nigga', 'nigger', 'niggas', 'negro',
         'fagz', 'edit', 'slut', 'EDIT', 'Edit', 'reddit', 'skank', 'nA', 'nB', 'NB', "'>'", '>', '\\]', "'\\]'", '\\[', '<', '\\*', '-',
-        'REDDIT']
+        'REDDIT', 'Shit,', 'Shit', 'SHIT', 'fuck', 'fucking', 'Fucking', 'fucked' , 'fuckin', 'fucken', 'fuckover', 'fucks', 'Fucks', 'FUCKS', 'Fuck',
+        'Fucks', 'FUCK', "Fuckin’", 'Fuckin', 'Fucken', 'FUCk', 'fUcKiNg ', 'pretty fuccin', 'Fuccccccckkkkkk ', 'fuccckkc', 'Fucccccc. ', 'fuccboi ', 'FUCCKKK',
+        'FUCCKK', 'FUCJING ', 'fuccin ']
 
         for words in forbidden:
-            df_topics = df_topics.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True)
-            df_trending = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True)
-            df_questions = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True)
+            df_topics = df_topics.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
+            df_trending = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
+            df_questions = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
 
         df = df_topics.stack()
         df = df.append(df_trending.stack())
