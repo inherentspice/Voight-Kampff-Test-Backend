@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import gpt_2_simple as gpt
+import re
 
 
 class Data:
@@ -45,12 +46,12 @@ class Data:
         df_questions = df_questions.fillna(method='ffill')
 
         forbidden = ['deleted', 'cunt', 'whore', 'nigga', 'fag', 'fags', 'faggot', 'nigga', 'nigger', 'niggas', 'negro',
-        'fagz', 'edit', 'slut', 'EDIT', 'Edit', 'reddit', 'skank', 'nA', 'nB', 'NB']
+        'fagz', 'edit', 'slut', 'EDIT', 'Edit', 'reddit', 'skank', 'nA', 'nB', 'NB', "'>'", '>', '\\]', "'\\]'", '\\[', '<', '\\*', '-', 'REDDIT']
 
         for words in forbidden:
-            df_topics = df_topics.replace(words, '', regex=True)
-            df_trending = df_trending.replace(words, '', regex=True)
-            df_questions = df_trending.replace(words, '', regex=True)
+            df_topics = df_topics.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True)
+            df_trending = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True)
+            df_questions = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True)
 
         df = df_topics.stack()
         df = df.append(df_trending.stack())
