@@ -5,7 +5,7 @@ wheel>=0.29
 
 # data science
 gpt-2-simple==0.8.1
-tensorflow>=2.9.0
+# tensorflow>=2.9.0
 
 # tests/linter
 black
