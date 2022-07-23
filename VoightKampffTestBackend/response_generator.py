@@ -1,7 +1,5 @@
 import gpt_2_simple as gpt2
 import os
-import requests
-import tensorflow as tf
 
 
 class Response:
@@ -23,7 +21,7 @@ class Response:
             print(f"Creating checkpoint files")
             gpt2.download_gpt2(model_name=model_name) #base checkpoint is saved under the name of run_name
 
-        tf.compat.v1.reset_default_graph()
+        # tf.compat.v1.reset_default_graph()
 
         if self.sess == None:
             self.sess = gpt2.start_tf_sess()
