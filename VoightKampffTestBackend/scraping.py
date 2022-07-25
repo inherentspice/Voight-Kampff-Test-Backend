@@ -37,8 +37,9 @@ class Reddit:
         #loop through top-level comments in the reddit thread
         #and append to DataFrame
         for comment in link.comments.list():
-            df = df.append({'Answer' : comment.body},
-                ignore_index = True)
+            df = pd.concat([df, pd.DataFrame.from_records([{'Answer' : comment.body}])])
+            # df = df.append({'Answer' : comment.body},
+                # ignore_index = True)
 
         #short title if it is not
         if topic=="qanda":
@@ -117,8 +118,9 @@ class Reddit:
             post.comments.replace_more(limit=0)
             print(f"Getting comments from {post.title}")
             for comment in post.comments.list():
-                df = df.append({'Answer' : comment.body},
-                    ignore_index = True)
+                df = pd.concat([df, pd.DataFrame.from_records([{'Answer' : comment.body}])])
+                # df = df.append({'Answer' : comment.body},
+                    # ignore_index = True)
             time.sleep(0.10)
 
         #write results to csv named after the search_term
