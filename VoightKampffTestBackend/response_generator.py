@@ -1,6 +1,6 @@
 import gpt_2_simple as gpt2
 import os
-
+import tensorflow as tf
 
 class Response:
     def __init__(self):
@@ -21,15 +21,17 @@ class Response:
             print(f"Creating checkpoint files")
             gpt2.download_gpt2(model_name=model_name) #base checkpoint is saved under the name of run_name
 
-        # tf.compat.v1.reset_default_graph()
+        tf.compat.v1.reset_default_graph()
 
         if self.sess == None:
             self.sess = gpt2.start_tf_sess()
+            reuse = False
         else:
             self.sess = gpt2.reset_session(self.sess)
+            reuse = True
 
 
-        gpt2.load_gpt2(self.sess, run_name=run_name)
+        gpt2.load_gpt2(self.sess, run_name=run_name, reuse=reuse)
         return self.sess
 
 
