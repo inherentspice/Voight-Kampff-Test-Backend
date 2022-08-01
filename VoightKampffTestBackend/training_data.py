@@ -21,18 +21,17 @@ class Data:
             if value:
                 for file in value:
                     y = os.path.join(key, file)
-                    data[file.replace('.csv', '')] = pd.read_csv(y)['Answer']
+                    data[file.replace('.csv', '')] = pd.read_csv(y, lineterminator='\n')['Answer']
 
         return data
 
-    def transform_training_data(self):
+    def transform_training_data(self, limited=False):
 
         data = self.get_response()
 
         df_topics = pd.DataFrame()
         df_trending = pd.DataFrame()
         df_questions = pd.DataFrame()
-
         for key, value in data.items():
             if len(key) < 12:
                 df_topics[key] = value
@@ -40,7 +39,6 @@ class Data:
                 df_trending[key] = value
             else:
                 df_questions[key] = value
-
 
         df_topics = df_topics.fillna(method='ffill')
         df_trending = df_trending.fillna(method='ffill')
@@ -55,11 +53,16 @@ class Data:
         for words in forbidden:
             df_topics = df_topics.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
             df_trending = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
-            df_questions = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
+            df_questions = df_questions.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
 
-        df = df_topics.stack()
-        df = df.append(df_trending.stack())
-        df = df.append(df_questions.stack())
+        if limited:
+            for column in df_questions.columns:
+                df_questions[column] = column + ' ' + df_questions[column].astype(str)
+            df = df_questions
+        else:
+            df = df_topics.stack()
+            df = df.append(df_trending.stack())
+            df = df.append(df_questions.stack())
 
         path = "raw_data/preprocessed_data"
         if not os.path.exists(path):
@@ -69,15 +72,15 @@ class Data:
 
         df.to_csv('raw_data/preprocessed_data/training_text.csv', index=None)
 
-        encoded_path = 'raw_data/encoded_data'
-        if not os.path.exists(encoded_path):
-            os.makedirs(encoded_path)
-            print(f"Making new directory at {path}")
+        # encoded_path = 'raw_data/encoded_data'
+        # if not os.path.exists(encoded_path):
+        #     os.makedirs(encoded_path)
+        #     print(f"Making new directory at {path}")
 
-        gpt.encode_csv('raw_data/preprocessed_data/training_text.csv', out_path='raw_data/encoded_data/encoded_text.csv')
+        # gpt.encode_csv('raw_data/preprocessed_data/training_text.csv', out_path='raw_data/encoded_data/encoded_text.csv')
 
 
 
 
 if __name__ == '__main__':
-    Data().transform_training_data()
+    Data().transform_training_data(limited=True)
