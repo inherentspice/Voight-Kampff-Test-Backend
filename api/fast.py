@@ -65,6 +65,15 @@ async def websocket_endpoint(websocket: WebSocket):
         answer = response(data)["response"]
         await websocket.send_text(f"{answer}")
 
+@app.get("/role")
+def role():
+    random_int = np.random.randint(1,100)
+    if random_int % 2 == 0:
+        role = True
+    else:
+        role = False
+
+    return {'role': role}
 
 @app.get("/question")
 def question():
@@ -82,14 +91,15 @@ def question():
     return {"question": questions.get(random_int)}
 
 @app.get("/response")
-async def response(question):
+
+def response(question):
     question_length = question.str.split().len()
     sess = await response_generator.Response().get_model(run_name='run2')
     length = np.random.randint(question_length + 32, 160)
     top_k = np.random.randint(2, 6000)
     temperature = np.random.uniform(0.6, 0.9)
 
-    answer = await response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature, run_name='run2')
+    answer = response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature, run_name='run2')
     locate = answer.rfind(".")
     answer = answer[:locate+1]
     return {"response": answer.rpartition("?")[2]}

@@ -37,8 +37,9 @@ class Reddit:
         #loop through top-level comments in the reddit thread
         #and append to DataFrame
         for comment in link.comments.list():
-            df = df.append({'Answer' : comment.body},
-                ignore_index = True)
+            df = pd.concat([df, pd.DataFrame.from_records([{'Answer' : comment.body}])])
+            # df = df.append({'Answer' : comment.body},
+                # ignore_index = True)
 
         #short title if it is not
         if topic=="qanda":
@@ -86,7 +87,7 @@ class Reddit:
             time.sleep(0.10)
 
 
-    def search_by_keyword(self, subreddit="all", search_term="wealth", limit=1000):
+    def search_by_keyword(self, subreddit="all", search_term="wealth", limit=10):
         """Searches 'all' subreddits for a search_term in the title, and
         scrapes the top comments from 'limit' posts. Results are written
         into one csv file with the name of the search term."""
@@ -117,12 +118,13 @@ class Reddit:
             post.comments.replace_more(limit=0)
             print(f"Getting comments from {post.title}")
             for comment in post.comments.list():
-                df = df.append({'Answer' : comment.body},
-                    ignore_index = True)
+                df = pd.concat([df, pd.DataFrame.from_records([{'Answer' : comment.body}])])
+                # df = df.append({'Answer' : comment.body},
+                    # ignore_index = True)
             time.sleep(0.10)
 
         #write results to csv named after the search_term
-        df.to_csv(f'raw_data/scraped_data/topics/{search_term}.csv')
+        df.to_csv(f'raw_data/scraped_data/topics/{search_term[0:5]}.csv')
 
 
 if __name__ == '__main__':
