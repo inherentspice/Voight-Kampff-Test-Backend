@@ -91,9 +91,11 @@ def question():
     return {"question": questions.get(random_int)}
 
 @app.get("/response")
+
 def response(question):
-    sess = response_generator.Response().get_model(run_name='run2')
-    length = np.random.randint(50, 100)
+    question_length = question.str.split().len()
+    sess = await response_generator.Response().get_model(run_name='run2')
+    length = np.random.randint(question_length + 32, 160)
     top_k = np.random.randint(2, 6000)
     temperature = np.random.uniform(0.6, 0.9)
 
