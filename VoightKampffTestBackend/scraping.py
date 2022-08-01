@@ -124,7 +124,7 @@ class Reddit:
             time.sleep(0.10)
 
         #write results to csv named after the search_term
-        df.to_csv(f'raw_data/scraped_data/topics/{search_term[0:5]}.csv')
+        df.to_csv(f'raw_data/scraped_data/topics/{search_term}.csv')
 
 
 if __name__ == '__main__':
