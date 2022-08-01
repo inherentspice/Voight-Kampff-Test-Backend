@@ -50,7 +50,7 @@ class Data:
         'fagz', 'edit', 'slut', 'EDIT', 'Edit', 'reddit', 'skank', 'nA', 'nB', 'NB', "'>'", '>', '\\]', "'\\]'", '\\[', '<', '\\*', '-',
         'REDDIT', 'Shit,', 'Shit', 'SHIT', 'fuck', 'fucking', 'Fucking', 'fucked' , 'fuckin', 'fucken', 'fuckover', 'fucks', 'Fucks', 'FUCKS', 'Fuck',
         'Fucks', 'FUCK', "Fuckin’", 'Fuckin', 'Fucken', 'FUCk', 'fUcKiNg ', 'pretty fuccin', 'Fuccccccckkkkkk ', 'fuccckkc', 'Fucccccc. ', 'fuccboi ', 'FUCCKKK',
-        'FUCCKK', 'FUCJING ', 'fuccin ']
+        'FUCCKK', 'FUCJING ', 'fuccin ', 'TL;DR', '~', 'GDG']
 
         for words in forbidden:
             df_topics = df_topics.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
