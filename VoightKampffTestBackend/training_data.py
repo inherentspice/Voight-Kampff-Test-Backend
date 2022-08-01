@@ -1,8 +1,6 @@
-from dataclasses import replace
 import pandas as pd
 import os
 import gpt_2_simple as gpt
-import re
 
 
 class Data:
@@ -30,18 +28,15 @@ class Data:
         data = self.get_response()
 
         df_topics = pd.DataFrame()
-        df_trending = pd.DataFrame()
         df_questions = pd.DataFrame()
+
         for key, value in data.items():
-            if len(key) < 12:
-                df_topics[key] = value
-            elif len(key) == 12:
-                df_trending[key] = value
-            else:
+            if key.endswith('?'):
                 df_questions[key] = value
+            else:
+                df_topics[key] = value
 
         df_topics = df_topics.fillna(method='ffill')
-        df_trending = df_trending.fillna(method='ffill')
         df_questions = df_questions.fillna(method='ffill')
 
         forbidden = ['deleted', 'cunt', 'whore', 'nigga', 'fag', 'fags', 'faggot', 'nigga', 'nigger', 'niggas', 'negro',
@@ -52,16 +47,19 @@ class Data:
 
         for words in forbidden:
             df_topics = df_topics.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
-            df_trending = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
             df_questions = df_questions.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
 
+        for column in df_questions.columns:
+            df_questions[column] = column + ' ' + df_questions[column].astype(str)
+
+        for column in df_topics.columns:
+            df_topics[column] = column + ' ' + df_topics[column].astype(str)
+
         if limited:
-            for column in df_questions.columns:
-                df_questions[column] = column + ' ' + df_questions[column].astype(str)
             df = df_questions
+
         else:
             df = df_topics.stack()
-            df = df.append(df_trending.stack())
             df = df.append(df_questions.stack())
 
         path = "raw_data/preprocessed_data"
@@ -83,4 +81,4 @@ class Data:
 
 
 if __name__ == '__main__':
-    Data().transform_training_data(limited=True)
+    Data().transform_training_data(limited=False)
