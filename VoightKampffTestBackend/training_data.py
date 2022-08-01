@@ -61,9 +61,9 @@ class Data:
             df = df_questions
         else:
             df = df_topics.stack()
-            df = df.append(df_trending.stack())
-            df = df.append(df_questions.stack())
-
+            # df = df.append(df_trending.stack())
+            # df = df.append(df_questions.stack())
+            df = pd.concat([df,df_trending.stack(),df_questions.stack()])
         path = "raw_data/preprocessed_data"
         if not os.path.exists(path):
             os.makedirs(path)
