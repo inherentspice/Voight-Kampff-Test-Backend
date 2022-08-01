@@ -1,7 +1,7 @@
 from dataclasses import replace
 import pandas as pd
 import os
-import gpt_2_simple as gpt
+# import gpt_2_simple as gpt
 import re
 
 
@@ -58,8 +58,9 @@ class Data:
             df_questions = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
 
         df = df_topics.stack()
-        df = df.append(df_trending.stack())
-        df = df.append(df_questions.stack())
+        # df = df.append(df_trending.stack())
+        # df = df.append(df_questions.stack())
+        df = pd.concat([df,df_trending.stack(),df_questions.stack()])
 
         path = "raw_data/preprocessed_data"
         if not os.path.exists(path):
@@ -69,12 +70,12 @@ class Data:
 
         df.to_csv('raw_data/preprocessed_data/training_text.csv', index=None)
 
-        encoded_path = 'raw_data/encoded_data'
-        if not os.path.exists(encoded_path):
-            os.makedirs(encoded_path)
-            print(f"Making new directory at {path}")
+        # encoded_path = 'raw_data/encoded_data'
+        # if not os.path.exists(encoded_path):
+        #     os.makedirs(encoded_path)
+        #     print(f"Making new directory at {path}")
 
-        gpt.encode_csv('raw_data/preprocessed_data/training_text.csv', out_path='raw_data/encoded_data/encoded_text.csv')
+        # gpt.encode_csv('raw_data/preprocessed_data/training_text.csv', out_path='raw_data/encoded_data/encoded_text.csv')
 
 
 
