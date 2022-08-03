@@ -19,7 +19,7 @@ class Response:
 
         if not os.path.isdir(os.path.join("checkpoint", run_name)):
             print(f"Creating checkpoint files")
-            gpt2.download_gpt2(model_name=model_name) #base checkpoint is saved under the name of run_name
+            gpt2.download_gpt2(model_name=model_name, model_dir=os.path.join("checkpoint", run_name)) #base checkpoint is saved under the name of run_name
 
         tf.compat.v1.reset_default_graph()
 
@@ -35,7 +35,7 @@ class Response:
         return self.sess
 
 
-    def train_model(self, sess, file, **kwargs):
+    def train_model(self, sess, file, run_name='run3', **kwargs):
         if kwargs.get("model_name"):
             model_name = kwargs.get("model_name")
         else:
@@ -51,7 +51,8 @@ class Response:
               model_name=model_name,
               steps=steps,
               restore_from ='latest',
-              reuse=True)
+              reuse=True,
+              run_name=run_name)
 
 
         return sess
@@ -64,5 +65,6 @@ class Response:
 
 
 if __name__ == '__main__':
-    sess = Response().get_model(run_name='run2')
-    print(Response().get_response(sess=sess, prompt="If I woke up with that much money", run_name='run2'))
+    sess = Response().get_model(run_name='run3')
+    # sess = Response().train_model(sess=sess, file='raw_data/preprozcessed_data/training_text.csv', steps=10000)
+    print(Response().get_response(sess=sess, prompt="What improved your quality of life so much, you wish you did it sooner?", top_k=5000, run_name='run3'))

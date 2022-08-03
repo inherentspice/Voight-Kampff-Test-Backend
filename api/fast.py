@@ -93,13 +93,13 @@ def question():
 @app.get("/response")
 
 def response(question):
-    question_length = question.str.split().len()
-    sess = response_generator.Response().get_model(run_name='run2')
+    question_length = len(question.split())
+    sess = response_generator.Response().get_model(run_name='run3')
     length = np.random.randint(question_length + 32, 160)
     top_k = np.random.randint(2, 6000)
     temperature = np.random.uniform(0.6, 0.9)
 
-    answer = response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature, run_name='run2')
+    answer = response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature, run_name='run3')
     locate = answer.rfind(".")
     answer = answer[:locate+1]
     return {"response": answer.rpartition("?")[2]}

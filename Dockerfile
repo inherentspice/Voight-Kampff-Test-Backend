@@ -2,7 +2,7 @@ FROM python:3.8.12-buster
 RUN rm ~/.cache/pip -rf
 WORKDIR /VoightKampffTestBackend
 
-COPY checkpoint/run2  /VoightKampffTestBackend/checkpoint/run2
+COPY checkpoint/run3  /VoightKampffTestBackend/checkpoint/run3
 COPY requirements.txt /VoightKampffTestBackend/requirements.txt
 RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip
 RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --no-cache-dir -r requirements.txt
