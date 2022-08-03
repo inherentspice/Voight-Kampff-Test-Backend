@@ -1,8 +1,6 @@
-from dataclasses import replace
 import pandas as pd
 import os
 import gpt_2_simple as gpt
-import re
 
 
 class Data:
@@ -21,29 +19,24 @@ class Data:
             if value:
                 for file in value:
                     y = os.path.join(key, file)
-                    data[file.replace('.csv', '')] = pd.read_csv(y)['Answer']
+                    data[file.replace('.csv', '')] = pd.read_csv(y, lineterminator='\n')['Answer']
 
         return data
 
-    def transform_training_data(self):
+    def transform_training_data(self, limited=False):
 
         data = self.get_response()
 
         df_topics = pd.DataFrame()
-        df_trending = pd.DataFrame()
         df_questions = pd.DataFrame()
 
         for key, value in data.items():
-            if len(key) < 12:
-                df_topics[key] = value
-            elif len(key) == 12:
-                df_trending[key] = value
-            else:
+            if key.endswith('?'):
                 df_questions[key] = value
-
+            else:
+                df_topics[key] = value
 
         df_topics = df_topics.fillna(method='ffill')
-        df_trending = df_trending.fillna(method='ffill')
         df_questions = df_questions.fillna(method='ffill')
 
         forbidden = ['deleted', 'cunt', 'whore', 'nigga', 'fag', 'fags', 'faggot', 'nigga', 'nigger', 'niggas', 'negro',
@@ -54,16 +47,24 @@ class Data:
         'Sorry already got someone maybe next time', 'Being the s “victim”.',
         'Just because the population is decreased does not mean it is actually increasing.  The population has increase.  It has not increased.  ',
         "That's a lie.", 'Yeah, very much so.', 'lesbian', "I mean it's true, but ", 'I thought the BoS did was possible because ',
-        'Yea, in the UK, ']
+        'Yea, in the UK, ', '/s']
 
         for words in forbidden:
-            df_topics = df_topics.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True).replace('asshole', 'egg', regex=True).replace('Wright and Beniers ', 'You', regex=True)
-            df_trending = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True).replace('asshole', 'egg', regex=True).replace('Wright and Beniers ', 'You', regex=True)
-            df_questions = df_trending.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True).replace('asshole', 'egg', regex=True).replace('Wright and Beniers ', 'You', regex=True)
+            df_topics = df_topics.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
+            df_questions = df_questions.replace(words, '', regex=True).replace(r'http\S+', '', regex=True).replace(r'www.\S+', '', regex=True).replace(r'Www.\S+', '', regex=True).replace(r'.com\S+', '', regex=True).replace("reddit", "my guy").replace("Reddit", "My guy", regex=True).replace("Redditors", "people", regex=True).replace('shit', 'things', regex=True).replace('bullshit', 'things', regex=True).replace('fucker', 'dude', regex=True)
 
-        df = df_topics.stack()
-        df = df.append(df_trending.stack())
-        df = df.append(df_questions.stack())
+        for column in df_questions.columns:
+            df_questions[column] = column + ' ' + df_questions[column].astype(str)
+
+        for column in df_topics.columns:
+            df_topics[column] = column + ' ' + df_topics[column].astype(str)
+
+        if limited:
+            df = df_questions
+
+        else:
+            df = df_topics.stack()
+            df = df.append(df_questions.stack())
 
         path = "raw_data/preprocessed_data"
         if not os.path.exists(path):
@@ -73,15 +74,15 @@ class Data:
 
         df.to_csv('raw_data/preprocessed_data/training_text.csv', index=None)
 
-        encoded_path = 'raw_data/encoded_data'
-        if not os.path.exists(encoded_path):
-            os.makedirs(encoded_path)
-            print(f"Making new directory at {path}")
+        # encoded_path = 'raw_data/encoded_data'
+        # if not os.path.exists(encoded_path):
+        #     os.makedirs(encoded_path)
+        #     print(f"Making new directory at {path}")
 
-        gpt.encode_csv('raw_data/preprocessed_data/training_text.csv', out_path='raw_data/encoded_data/encoded_text.csv')
+        # gpt.encode_csv('raw_data/preprocessed_data/training_text.csv', out_path='raw_data/encoded_data/encoded_text.csv')
 
 
 
 
 if __name__ == '__main__':
-    Data().transform_training_data()
+    Data().transform_training_data(limited=False)
