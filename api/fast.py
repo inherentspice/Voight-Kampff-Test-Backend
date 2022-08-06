@@ -48,9 +48,6 @@ html = """
 </html>
 """
 
-# @app.get('/')
-# def get():
-#     return "Welcome to Voight-Kampff Test!"
 
 @app.get("/")
 async def get():
@@ -78,31 +75,26 @@ def role():
 @app.get("/question")
 def question():
     random_int = np.random.randint(1, 9)
-    questions = {1: "Every country is an animal. What animal is your country?", #delete
-                 2: "If you could have the answer to one question, what would it be?",
-                 3: "The Supreme Court has overturned roe vs Wade. How do you feel?",
-                 4: "What improved your quality of life so much, you wish you did it sooner?",
-                 5: "What's a weird thing you think only you do?",
-                 6: "What's the worst alcoholic beverage?",
-                 7: "Without saying the name, what's your favourite video game?",
-                 8: "You can get the attention of the whole planet, but only for ten seconds. What do you say?",
-                 9: "You wake up tomorrow with Jeff Bezo's current net worth ($209 Billion USD). What do you do?"}
+    questions = {1: "If you could have the answer to one question, what would it be?",
+                 2: "The Supreme Court has overturned roe vs Wade. How do you feel?",
+                 3: "What improved your quality of life so much, you wish you did it sooner?",
+                 4: "What's a weird thing you think only you do?",
+                 5: "What's the worst alcoholic beverage?",
+                 6: "Without saying the name, what's your favourite video game?",
+                 7: "You can get the attention of the whole planet, but only for ten seconds. What do you say?",
+                 8: "You wake up tomorrow with Jeff Bezo's current net worth ($209 Billion USD). What do you do?"}
 
     return {"question": questions.get(random_int)}
 
 @app.get("/response")
 
 def response(question):
-    question_length = len(question.split())
     sess = response_generator.Response().get_model(run_name='run3')
-    length = np.random.randint(question_length+32, 100)
     top_k = np.random.randint(4000, 6000)
     temperature = np.random.uniform(0.6, 0.9)
 
-    answer = response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature, run_name='run3')
-    locate = answer.rfind(".")
-    answer = answer[:locate+1]
-    return {"response": answer.rpartition("?")[2]}
+    answer = response_generator.Response().get_response(sess=sess, prompt=question, length=200, top_k=top_k, temperature=temperature, run_name='run3')
+    return {"response": answer}
 
 if __name__ == "__main__":
     question = question()["question"]
