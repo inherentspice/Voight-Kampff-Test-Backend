@@ -134,7 +134,6 @@ if __name__ == '__main__':
             "https://www.reddit.com/r/AskReddit/comments/vwdq67/you_can_get_the_attention_of_the_whole_planet_but/",
             "https://www.reddit.com/r/AskReddit/comments/vwd8zd/if_you_could_have_the_answer_to_one_question_what/",
             "https://www.reddit.com/r/AskReddit/comments/vw7f2d/whats_the_worst_alcoholic_beverage/",
-            "https://www.reddit.com/r/AskReddit/comments/vvauxe/every_country_is_an_animal_what_animal_is_your/",
             "https://www.reddit.com/r/AskReddit/comments/osoje1/you_wake_up_tomorrow_with_jeff_bezos_current_net/",
             "https://www.reddit.com/r/AskReddit/comments/oqofqj/without_saying_the_name_whats_your_favorite_video/",
             ]
@@ -142,8 +141,6 @@ if __name__ == '__main__':
     for i in URLS:
         Reddit().get_child_posts(url=i)
 
-    Reddit().get_hot_posts()
-
-    TOPICS = ["wealth", "rich", "lottery", "Bezos", "quality of life", "improve life", "health", "worst alcohol", "tequila"]
+    TOPICS = ["a weird thing you do", "improved your quality of life", "if you were rich", "favourite video game", "roe v wade", "the most important question", "what would you say to the planet"]
     for i in TOPICS:
         Reddit().search_by_keyword(search_term=i)
