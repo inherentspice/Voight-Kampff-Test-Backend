@@ -78,7 +78,7 @@ def role():
 @app.get("/question")
 def question():
     random_int = np.random.randint(1, 9)
-    questions = {1: "Every country is an animal. What animal is your country?",
+    questions = {1: "Every country is an animal. What animal is your country?", #delete
                  2: "If you could have the answer to one question, what would it be?",
                  3: "The Supreme Court has overturned roe vs Wade. How do you feel?",
                  4: "What improved your quality of life so much, you wish you did it sooner?",
@@ -95,8 +95,8 @@ def question():
 def response(question):
     question_length = len(question.split())
     sess = response_generator.Response().get_model(run_name='run3')
-    length = np.random.randint(question_length + 32, 160)
-    top_k = np.random.randint(2, 6000)
+    length = np.random.randint(question_length+32, 100)
+    top_k = np.random.randint(4000, 6000)
     temperature = np.random.uniform(0.6, 0.9)
 
     answer = response_generator.Response().get_response(sess=sess, prompt=question, length=length, top_k=top_k, temperature=temperature, run_name='run3')
