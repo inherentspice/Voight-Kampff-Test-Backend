@@ -67,4 +67,4 @@ class Response:
 if __name__ == '__main__':
     sess = Response().get_model(run_name='run3')
     # sess = Response().train_model(sess=sess, file='raw_data/preprozcessed_data/training_text.csv', steps=10000)
-    print(Response().get_response(sess=sess, prompt="What improved your quality of life so much, you wish you did it sooner?", top_k=5000, run_name='run3'))
+    print(Response().get_response(sess=sess, prompt="What improved your quality of life so much, you wish you did it sooner?", top_k=5000, length=100, run_name='run3'))

@@ -74,13 +74,6 @@ class Data:
 
         df.to_csv('raw_data/preprocessed_data/training_text.csv', index=None)
 
-        # encoded_path = 'raw_data/encoded_data'
-        # if not os.path.exists(encoded_path):
-        #     os.makedirs(encoded_path)
-        #     print(f"Making new directory at {path}")
-
-        # gpt.encode_csv('raw_data/preprocessed_data/training_text.csv', out_path='raw_data/encoded_data/encoded_text.csv')
-
 
 
 
