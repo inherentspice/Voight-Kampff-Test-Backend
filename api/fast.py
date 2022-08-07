@@ -74,15 +74,12 @@ def role():
 
 @app.get("/question")
 def question():
-    random_int = np.random.randint(1, 9)
-    questions = {1: "If you could have the answer to one question, what would it be?",
-                 2: "The Supreme Court has overturned roe vs Wade. How do you feel?",
-                 3: "What improved your quality of life so much, you wish you did it sooner?",
-                 4: "What's a weird thing you think only you do?",
-                 5: "What's the worst alcoholic beverage?",
-                 6: "Without saying the name, what's your favourite video game?",
-                 7: "You can get the attention of the whole planet, but only for ten seconds. What do you say?",
-                 8: "You wake up tomorrow with Jeff Bezo's current net worth ($209 Billion USD). What do you do?"}
+    random_int = np.random.randint(1, 6)
+    questions = {1: "What improved your quality of life so much, you wish you did it sooner?",
+                 2: "What's a weird thing you think only you do?",
+                 3: "What's the worst alcoholic beverage?",
+                 4: "Without saying the name, what's your favourite video game?",
+                 5: "You wake up tomorrow with Jeff Bezo's current net worth ($209 Billion USD). What do you do?"}
 
     return {"question": questions.get(random_int)}
 
