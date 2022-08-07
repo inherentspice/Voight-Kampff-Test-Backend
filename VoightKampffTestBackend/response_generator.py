@@ -57,7 +57,7 @@ class Response:
 
         return sess
 
-    def get_response(self, sess, prompt="How can you prove you aren't an android?", length=50, temperature=0.8, top_k=40, run_name='run1'):
+    def get_response(self, sess, prompt="How can you prove you aren't an android?", length=1000, temperature=0.8, top_k=40, run_name='run1'):
 
         response = gpt2.generate(sess, prefix=prompt, nsamples=1, length=length, temperature=temperature, top_k=top_k, run_name=run_name,
                                  return_as_list=True,include_prefix=False,truncate="<|endoftext|>")[0]
@@ -67,4 +67,4 @@ class Response:
 if __name__ == '__main__':
     sess = Response().get_model(run_name='run3')
     # sess = Response().train_model(sess=sess, file='raw_data/preprozcessed_data/training_text.csv', steps=10000)
-    print(Response().get_response(sess=sess, prompt="What improved your quality of life so much, you wish you did it sooner?", top_k=5000, length=100, run_name='run3'))
+    print(Response().get_response(sess=sess, prompt="What improved your quality of life so much, you wish you did it sooner?", top_k=5000, length=1000, run_name='run3'))
